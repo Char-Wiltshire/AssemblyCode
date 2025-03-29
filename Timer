@@ -1,0 +1,47 @@
+section .bss
+    num_buffer resb 2
+
+section .data
+    newline db 10
+
+section .text
+    global _start
+
+_start:
+    mov rbx, 10
+
+countdown_loop:
+    mov rdi, rbx
+    call print_number
+
+    mov rdi, newline
+    call print_string
+
+    dec rbx
+    cmp rbx, -1 
+    jne countdown_loop
+
+exit_program:
+    mov rax, 1   
+    xor rdi, rdi 
+    syscall
+
+print_string:
+    mov rdx, 1   
+    mov rsi, rdi  
+    mov rdi, 1    
+    mov rax, 4   
+    syscall
+    ret
+
+print_number:
+    mov rsi, num_buffer  
+    add rdi, '0'        
+    mov byte [rsi], dil  
+    mov byte [rsi+1], 0 
+    
+    mov rdx, 1          
+    mov rdi, 1           
+    mov rax, 4         
+    syscall
+    ret
